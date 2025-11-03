@@ -32,7 +32,7 @@ const LandingPage: React.FC = () => {
       }}
     >
       {/* Overlay: Opacity is slightly reduced (0.3) on base image for readability */}
-    <div className={`absolute inset-0 bg-black transition-opacity duration-1000 ${isFading ? 'opacity-90' : 'opacity-70'}`} />
+    <div className={`absolute inset-0 bg-black transition-opacity duration-1000 ${isFading ? 'opacity-75' : 'opacity-70'}`} />
 
       <div className="relative z-10 min-h-screen flex flex-col">
         <Navbar />
