@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
 			/>
 
 			<div className="relative z-10 min-h-screen flex flex-col">
-				<Navbar />
+				<Navbar showSearchBar={true} />
 				{/* ⬇️ WELCOME SECTION ADDED HERE ⬇️ */}
 				<div className="text-center p-8 text-[#f8f1ec] drop-shadow-lg">
 					<h1 className="text-4xl lg:text-6xl font-extrabold mb-2 tracking-wide drop-shadow-lg">

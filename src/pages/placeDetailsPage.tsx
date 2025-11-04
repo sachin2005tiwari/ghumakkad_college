@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom'; // Added Link for the login link
-import Navbar from '../components/Navbar';
-import Carousel from '../components/Carousel';
-import Footer from '../components/Footer';
-import { placesData } from '../Data/PlacesData';
-import type { Place } from '../types/Place';
-import Chatbot from '../components/Chatbot';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom"; // Added Link for the login link
+import Navbar from "../components/Navbar";
+import Carousel from "../components/Carousel";
+import Footer from "../components/Footer";
+import Chatbot from "../components/Chatbot";
+import { LocationDetails } from "../types/locations";
+import locationService from "../services/locationServices";
+import AttractionCard from "../components/AttractionCard";
 import { useAppSelector } from '../store/hook'; // New import for user state
 import { Heart } from 'lucide-react';
 
@@ -20,10 +21,10 @@ interface Comment {
 }
 
 const PlaceDetailsPage: React.FC = () => {
-  const { name: encodedPlaceName } = useParams<{ name: string }>();
-  const [place, setPlace] = useState<Place | null>(null);
-  const [nameOpacity, setNameOpacity] = useState(1);
-
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const [place, setPlace] = useState<LocationDetails | null>(null);
+	const [carasolImages, setCarasolImages] = useState<string[]>([]);
   // Get user state for commenting feature
   const { username, user } = useAppSelector((state) => state.auth);
 
@@ -87,74 +88,104 @@ const PlaceDetailsPage: React.FC = () => {
     setNewCommentText('');
   };
 
-  useEffect(() => {
-    const placeName = encodedPlaceName ? decodeURIComponent(encodedPlaceName) : '';
-    const foundPlace = placesData.find(p => p.name === placeName) || null;
-    setPlace(foundPlace);
+	// Fetches data for a location if id is available
+	useEffect(() => {
+		const fetchLocationDetails = async (placeId: number) => {
+			try {
+				const data = await locationService.getLocationById(placeId);
+				setPlace(data);
+			} catch (error) {
+				console.error("Error fetching location details:", error);
+				navigate("/"); // Redirect to home on error
+			}
+		};
 
-    const handleScroll = () => {
-      const opacity = Math.max(1 - window.scrollY / 200, 0);
-      setNameOpacity(opacity);
-    };
+		if (id) {
+			const placeId = parseInt(id, 10);
+			fetchLocationDetails(placeId);
+		}
+	}, [id]);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [encodedPlaceName]);
+	useEffect(() => {
+		if (place) {
+			const attractions = place.attractions_list;
+			attractions.map((attraction) => {
+				attraction.screenshots.map((imageUrl) => {
+					setCarasolImages((prevImages) => [...prevImages, imageUrl]);
+				});
+			});
+		}
+	}, [place, id]);
 
-  if (!place) {
-    return (
-      <div className="bg-brand-light min-h-screen">
+	if (!place) {
+		return (
+			<div className="bg-brand-light min-h-screen">
+				<Navbar />
+				<div className="text-center p-10 text-2xl">
+					Place not found!
+				</div>
+			</div>
+		);
+	}
 
-        <Navbar />
-        <div className="text-center p-10 text-2xl">Place not found!</div>
-      </div>
-    );
-  }
+	return (
+		// ⬅️ Updated the main container with background styles
+		<div
+			className="min-h-screen flex flex-col relative bg-cover bg-center"
+			style={{ backgroundImage: `url(${STATIC_BACKGROUND})` }}
+		>
+			{/* Static Overlay for Readability */}
+			<div className="absolute inset-0 bg-black opacity-70 z-0"></div>
 
-  // FIX: Using a standard Material Design OUTLINED heart path for better symmetry
-  
+			{/* Main Content Wrapper (z-10 ensures content is above the overlay) */}
+			<div className="relative z-10 flex-grow flex flex-col">
+				<Navbar />
 
-  return (
-    // ⬅️ Updated the main container with background styles
-    <div
-      className="min-h-screen flex flex-col relative bg-cover bg-center"
-      style={{ backgroundImage: `url(${STATIC_BACKGROUND})` }}
-    >
-      {/* Static Overlay for Readability */}
-      <div className="absolute inset-0 bg-black opacity-70 z-0"></div>
+				{/* Page content starts here */}
+				<div className="relative max-h-[500px]">
+					<Carousel images={carasolImages} />
 
-      {/* Main Content Wrapper (z-10 ensures content is above the overlay) */}
-      <div className="relative z-10 flex-grow flex flex-col">
-        <Navbar />
+					<h1
+						className="top-5 left-5 text-4xl z-10 text-white bg-brand-secondary/50 p-3 rounded-lg transition-opacity duration-500 absolute"
+					>
+						{place.name}
+					</h1>
+				</div>
 
-        {/* Page content starts here */}
-        <div className="relative max-h-[500px]">
-          <Carousel images={place.details.images} />
+				{/* Description Section and Tabs (Set background white for readability) */}
+				<div className="p-5 max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg my-8">
+					<p className="text-xl text-gray-700 my-5">
+						{place.about_description}
+					</p>
+				</div>
 
-          <h1
-            className="absolute top-5 left-5 text-4xl z-10 text-white bg-brand-secondary/50 p-3 rounded-lg transition-opacity duration-500"
-            style={{ opacity: nameOpacity }}
-          >
-            {place.name}
-          </h1>
-        </div>
+				<div className="p-5 max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg my-8">
+					<div className="grid grid-cols-3 w-full">
+						{place.attractions_list.map((attraction, index) => {
+							return (
+								<AttractionCard
+									key={index}
+									imageUrl={attraction.screenshots[0]}
+									name={attraction.name}
+								/>
+							);
+						})}
+					</div>
+				</div>
 
-        {/* Description Section and Tabs (Set background white for readability) */}
-        <div className="p-5 max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg my-8">
-          <p className="text-xl text-gray-700 my-5">
-            {place.details.fullDescription}
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto w-full">
-          {/* Location Tab */}
-          <div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
-            <h2 className="text-2xl font-semibold mb-3 text-gray-800">Location</h2>
-            <p className="text-gray-600 mb-4">Address: 123 Main St, Sample City, Country</p>
-            <div className="w-full h-64 bg-gray-200 flex justify-center items-center text-gray-500 text-xl rounded-lg">
-              <p>Map Placeholder</p>
-            </div>
-          </div>
+				<div className="max-w-4xl mx-auto w-full">
+					{/* Location Tab */}
+					<div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
+						<h2 className="text-2xl font-semibold mb-3 text-gray-800">
+							Location
+						</h2>
+						<p className="text-gray-600 mb-4">
+							Address: 123 Main St, Sample City, Country
+						</p>
+						<div className="w-full h-64 bg-gray-200 flex justify-center items-center text-gray-500 text-xl rounded-lg">
+							<p>Map Placeholder</p>
+						</div>
+					</div>
 
           {/* Comments Section (Replaces old Blogs/Reviews Tab) */}
           <div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
@@ -224,10 +255,10 @@ const PlaceDetailsPage: React.FC = () => {
 
       </div>
 
-      <Footer />
-      <Chatbot />
-    </div>
-  );
+			<Footer />
+			<Chatbot />
+		</div>
+	);
 };
 
 export default PlaceDetailsPage;

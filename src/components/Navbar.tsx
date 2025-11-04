@@ -9,7 +9,12 @@ import { setLocations } from "../store/locationSlice";
 // Using your specified logo path
 const logoPath = "/photo/logo.png";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+	showSearchBar?: boolean;
+}
+
+const Navbar = (props: NavbarProps) => {
+	const {showSearchBar = false} = props;
 	const { user, username } = useAppSelector((state) => state.auth);
 	const dispatch = useAppDispatch();
 	const [searchTerm, setSearchTerm] = React.useState("");
@@ -94,7 +99,7 @@ const Navbar: React.FC = () => {
 			</div>
 
 			{/* ⬇️ SEARCH BAR SECTION: Now includes the icon ⬇️ */}
-			<div className="w-full lg:flex-1 flex justify-center mt-2 lg:mt-0">
+			{showSearchBar && <div className="w-full lg:flex-1 flex justify-center mt-2 lg:mt-0">
 				{/* Relative container holds the input and the absolute icon */}
 				<div className="relative w-full max-w-full lg:max-w-[500px] lg:ml-[250px]">
 					<input
@@ -121,7 +126,7 @@ const Navbar: React.FC = () => {
 						/>
 					</svg>
 				</div>
-			</div>
+			</div>}
 			{/* ⬆️ END SEARCH BAR SECTION ⬆️ */}
 
 			{/* User Signup/Login Section - Visible ONLY on large screens */}

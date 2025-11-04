@@ -21,7 +21,7 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
   // Calculate the horizontal shift: -100% per image
   // Note: The original JS used a fixed 20% shift logic that seems incorrect for a 100% image width. 
   // We use the standard 100% shift here.
-  const offset = -currentIndex * 100; 
+  const offset = -currentIndex * 10; 
 
   return (
     <div className="relative overflow-hidden w-full max-h-[500px]">

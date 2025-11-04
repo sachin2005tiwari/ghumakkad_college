@@ -16,7 +16,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
 	return (
 		<Link
 			// Link to the details page, encoding the name for the URL
-			to={`/place/${encodeURIComponent(place.name)}`}
+			to={`/place/${place.id}`}
 			// ⬇️ BOX-SHADOW CUSTOMIZATION: shadow-xl for default, hover:shadow-2xl for lift ⬇️
 			className="bg-[#f8f1ec] rounded-lg shadow-xl overflow-hidden w-[250px] cursor-pointer transition duration-200 hover:-translate-y-1 hover:shadow-2xl no-underline text-inherit"
 			// ⬆️ BOX-SHADOW CUSTOMIZATION ⬆️

@@ -1,4 +1,4 @@
-import { LocationCard } from "../types/locations";
+import { LocationCard, LocationDetails } from "../types/locations";
 import { supabase } from "./supabaseClient";
 
 export class LocationService{
@@ -30,6 +30,21 @@ export class LocationService{
             }
         } catch (error) {
             console.error("Error searching locations by name:", error);
+            throw error;
+        }
+    }
+
+    async getLocationById(id: number) : Promise<LocationDetails[] | any>{
+        try{
+            const {data, error} =  await supabase.from('locations').select('*').eq('id', id).single();
+            if(error){
+                throw error;
+            }
+            if(data){
+                return data as LocationDetails[];
+            }
+        } catch (error) {
+            console.error("Error fetching location by ID:", error);
             throw error;
         }
     }

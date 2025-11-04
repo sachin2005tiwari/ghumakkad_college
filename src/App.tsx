@@ -56,7 +56,7 @@ const App: React.FC = () => {
 			<Routes>
 				{/* Landing Page is now the Home page */}
 				<Route path="/" element={<LandingPage />} />
-				<Route path="/place/:name" element={<PlaceDetailsPage />} />
+				<Route path="/place/:id" element={<PlaceDetailsPage />} />
 
 				{/* New Pages */}
 
