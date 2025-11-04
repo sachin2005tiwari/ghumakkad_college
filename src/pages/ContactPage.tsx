@@ -16,29 +16,73 @@ const ContactPage: React.FC = () => {
         <Navbar />
         
         <div className="flex-grow flex items-center justify-center p-8 w-full">
-            <div className="bg-white/90 backdrop-blur-sm p-10 rounded-xl shadow-2xl max-w-lg w-full">
-                <h1 className="text-4xl font-bold text-brand-secondary mb-6 text-center">Get in Touch</h1>
-                
-                <form className="space-y-4">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-                        <input type="text" id="name" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
+            <div className="bg-white/90 backdrop-blur-sm p-10 rounded-xl shadow-2xl max-w-lg w-full text-gray-700">
+                <h1 className="text-4xl font-bold text-brand-secondary mb-6 text-center">Connect with the Ghumakkad Team</h1>
+
+                <div className="text-center mb-8">
+                    <p className="text-lg ">
+                        Ghumakkad is an open-source project dedicated to sharing travel stories. 
+                        Reach out to the core team members below for collaborations, questions, or contributions.
+                    </p>
+                </div>
+
+                <div className="space-y-6">
+                    {/* Person 1: Sachin Tiwari */}
+                    <div className="flex items-start p-4 border-l-4 border-brand-primary bg-gray-50 rounded-md">
+                        {/* Placeholder Image for Sachin Tiwari */}
+                        <img 
+                            src="photo/sachin.jpg" 
+                            alt="Sachin Tiwari Profile"
+                            className="h-16 w-16 rounded-full object-cover mr-4 flex-shrink-0" 
+                        />
+                        <div>
+                            <h2 className="text-xl font-semibold text-gray-800">Sachin Tiwari</h2>
+                            <p className="mt-1">
+                                GitHub: <a href="https://github.com/sachin2005tiwari" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-brand-primary font-medium">sachin2005tiwari</a>
+                            </p>
+                            <p>
+                              LinkedIn: <a href="https://www.linkedin.com/in/sachin-tiwari-995912259/" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-brand-primary font-medium">Sachin Tiwari</a>
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" id="email" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md" />
+
+                    {/* Person 2: Contributor Two */}
+                    <div className="flex items-start p-4 border-l-4 border-brand-primary bg-gray-50 rounded-md">
+                        {/* Placeholder Image for Riya Sharma */}
+                        <img 
+                            src="photo/aditya.jpg" 
+                            alt="Riya Sharma Profile"
+                            className="h-16 w-16 rounded-full object-cover mr-4 flex-shrink-0" 
+                        />
+                        <div>
+                            <h2 className="text-xl font-semibold text-gray-800">Aditya Dev</h2>
+                            <p className="mt-1">
+                                GitHub: <a href="https://github.com/Aditya-0703-Dev" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-brand-primary font-medium">Aditya-0703-Dev</a>
+                            </p>
+                            <p>
+                                LinkedIn: <a href="https://www.linkedin.com/in/devaditya491/" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-brand-primary font-medium">Aditya Dev</a> </p>
+                        </div>
                     </div>
-                    <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
-                        <textarea id="message" rows={4} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"></textarea>
+
+                    {/* Person 3: Contributor Three */}
+                    <div className="flex items-start p-4 border-l-4 border-brand-primary bg-gray-50 rounded-md">
+                        {/* Placeholder Image for Vivek Singh */}
+                        <img 
+                            src="photo/gaurav.jpg" 
+                            alt="gaurav gulia Profile"
+                            className="h-16 w-16 rounded-full object-cover mr-4 flex-shrink-0" 
+                        />
+                        <div>
+                            <h2 className="text-xl font-semibold text-gray-800">Gaurav Gulia</h2>
+                            <p className="mt-1">
+                                GitHub: <a href="https://github.com/OmniCoder100" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-brand-primary font-medium">OmniCoder100</a>
+                            </p>
+                            <p>
+                                LinkedIn: <a href="https://www.linkedin.com/in/gaurav-gulia-82772b2b2" target="_blank" rel="noopener noreferrer" className="text-brand-secondary hover:text-brand-primary font-medium">Gaurav Gulia</a>
+                            </p>
+                        </div>
                     </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-primary hover:bg-brand-secondary transition duration-150"
-                    >
-                        Send Message
-                    </button>
-                </form>
+                </div>
             </div>
         </div>
       </div>
