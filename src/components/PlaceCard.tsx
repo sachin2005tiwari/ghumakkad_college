@@ -7,12 +7,32 @@ interface PlaceCardProps {
 	onMouseEnter: (image: string) => void;
 	onMouseLeave: () => void;
 }
+const truncateText = (text: string, wordLimit: number): string => {
+    // Agar text undefined ho toh empty string return karo
+    if (!text) {
+        return "";
+    }
+    
+    // Text ko spaces ke through words mein break karo
+    const words = text.split(/\s+/);
+    
+    // Agar words ki count limit se kam hai, toh poora text waapis kar do
+    if (words.length <= wordLimit) {
+        return text;
+    }
+    
+    // Words ko limit tak slice karo, join karo aur '...' add karo
+    const truncatedText = words.slice(0, wordLimit).join(' ');
+    
+    return truncatedText.trim() + '...';
+}
 
 const PlaceCard: React.FC<PlaceCardProps> = ({
 	place,
 	onMouseEnter,
 	onMouseLeave,
 }) => {
+    const truncatedDescription = truncateText(place.about_description, 30);
 	return (
 		<Link
 			// Link to the details page, encoding the name for the URL
@@ -33,7 +53,8 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
 					{place.name}
 				</h2>
 				<p className="text-gray-600 text-sm">
-					{place.about_description}
+					
+                    {truncatedDescription}
 				</p>
 			</div>
 		</Link>

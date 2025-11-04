@@ -182,6 +182,7 @@ const PlaceDetailsPage: React.FC = () => {
 									key={index}
 									imageUrl={attraction.screenshots[0]}
 									name={attraction.name}
+									description={attraction.desc}
 								/>
 							);
 						})}
