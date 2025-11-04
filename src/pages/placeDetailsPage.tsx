@@ -366,14 +366,18 @@ const PlaceDetailsPage: React.FC = () => {
 				</div>
 
 				<div className="p-5 max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg my-8">
-					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 w-full gap-4 place-items-center">
-						{place.attractions_list.map((attraction, index) => (
-							<AttractionCard
-								key={index}
-								imageUrl={attraction.screenshots[0]}
-								name={attraction.name}
-							/>
-						))}
+
+					<div className="grid grid-cols-3 w-full">
+						{place.attractions_list.map((attraction, index) => {
+							return (
+								<AttractionCard
+									key={index}
+									imageUrl={attraction.screenshots[0]}
+									name={attraction.name}
+									description={attraction.desc}
+								/>
+							);
+						})}
 					</div>
 				</div>
 
