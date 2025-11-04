@@ -1,13 +1,50 @@
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useEffect } from "react";
 import { supabase } from "../services/supabaseClient";
-import { useAppSelector } from "../store/hook";
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import locationService from "../services/locationServices";
+import { LocationCard } from "../types/locations";
+import { setLocations } from "../store/locationSlice";
 
 // Using your specified logo path
 const logoPath = "/photo/logo.png";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+	showSearchBar?: boolean;
+}
+
+const Navbar = (props: NavbarProps) => {
+	const {showSearchBar = false} = props;
 	const { user, username } = useAppSelector((state) => state.auth);
+	const dispatch = useAppDispatch();
+	const [searchTerm, setSearchTerm] = React.useState("");
+
+	useEffect(() => {
+		// Set up a timer to delay the search execution.
+		const timerId = setTimeout(() => {
+			const searchedLocations = async (name: string) => {
+				try {
+					if (name.length > 0) {
+						const data = (await locationService.searchLocationByName(
+							name
+						)) as LocationCard[];
+						dispatch(setLocations(data));
+					} else {
+						const data =
+							(await locationService.getLocations()) as LocationCard[];
+						dispatch(setLocations(data));
+					}
+				} catch (error) {
+					console.error("Error searching locations in useEffect:", error);
+				}
+			};
+
+			searchedLocations(searchTerm);
+		}, 500); // 500ms delay
+
+		// Cleanup function: clear the timer if the user types again before it fires.
+		return () => clearTimeout(timerId);
+	}, [searchTerm]);
 
 	const handleLogout = async () => {
 		const { error } = await supabase.auth.signOut();
@@ -62,7 +99,7 @@ const Navbar: React.FC = () => {
 			</div>
 
 			{/* ⬇️ SEARCH BAR SECTION: Now includes the icon ⬇️ */}
-			<div className="w-full lg:flex-1 flex justify-center mt-2 lg:mt-0">
+			{showSearchBar && <div className="w-full lg:flex-1 flex justify-center mt-2 lg:mt-0">
 				{/* Relative container holds the input and the absolute icon */}
 				<div className="relative w-full max-w-full lg:max-w-[500px] lg:ml-[250px]">
 					<input
@@ -70,6 +107,7 @@ const Navbar: React.FC = () => {
 						placeholder="Search destinations..."
 						// CRUCIAL FIX: Added padding-left (pl-10) to make space for the icon
 						className="w-full p-2.5 pl-10 text-base rounded-[40px] border border-brand-secondary"
+						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
 
 					{/* Search Icon (SVG) - Absolute positioning inside the relative wrapper */}
@@ -88,7 +126,7 @@ const Navbar: React.FC = () => {
 						/>
 					</svg>
 				</div>
-			</div>
+			</div>}
 			{/* ⬆️ END SEARCH BAR SECTION ⬆️ */}
 
 			{/* User Signup/Login Section - Visible ONLY on large screens */}
