@@ -11,6 +11,8 @@ export interface LocationDetails {
     landing_image: string;
     about_description: string;
     attractions_list: Attraction[];
+    latitude: number;
+    longitude: number; 
 }
 
 export interface Attraction {

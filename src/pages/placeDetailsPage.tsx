@@ -8,10 +8,11 @@ import { LocationDetails } from "../types/locations";
 import locationService from "../services/locationServices";
 import AttractionCard from "../components/AttractionCard";
 import { useAppSelector } from "../store/hook";
-import { Heart } from "lucide-react";
+import { Heart, MapPinned } from "lucide-react";
 // Import your service and the new types
 import commentService from "../services/commentService";
 import { AppComment, DbComment } from "../types/comments";
+import MapDisplay from "../components/MapDisplay";
 
 const STATIC_BACKGROUND = "/photo/background.jpg";
 
@@ -366,7 +367,6 @@ const PlaceDetailsPage: React.FC = () => {
 				</div>
 
 				<div className="p-5 max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg my-8">
-
 					<div className="grid grid-cols-3 w-full">
 						{place.attractions_list.map((attraction, index) => {
 							return (
@@ -387,12 +387,20 @@ const PlaceDetailsPage: React.FC = () => {
 						<h2 className="text-2xl font-semibold mb-3 text-gray-800">
 							Location
 						</h2>
-						<p className="text-gray-600 mb-4">
-							Address: 123 Main St, Sample City, Country
-						</p>
-						<div className="w-full h-64 bg-gray-200 flex justify-center items-center text-gray-500 text-xl rounded-lg">
-							<p>Map Placeholder</p>
-						</div>
+						{place.latitude && place.longitude ? (
+							<MapDisplay
+								lat={place.latitude}
+								lon={place.longitude}
+								placeName={place.name}
+							/>
+						) : (
+							<div className="w-full h-64 bg-gray-200 flex justify-center items-center text-gray-500 text-xl rounded-lg">
+								<MapPinned size={30} className="mr-2" />
+								<p>
+									Map data is not available for this location.
+								</p>
+							</div>
+						)}
 					</div>
 
 					{/* Comments Section */}
