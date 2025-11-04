@@ -9,6 +9,8 @@ import ContactPage from "./pages/ContactPage";
 import { supabase } from "./services/supabaseClient";
 import { setUser } from "./store/authSlice";
 import { useAppDispatch } from "./store/hook";
+import locationService from "./services/locationServices";
+import { setLocations } from "./store/locationSlice";
 
 const App: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -34,6 +36,20 @@ const App: React.FC = () => {
 
 		return () => subscription.unsubscribe();
 	}, [dispatch]);
+
+	//Initial loading service for locations
+	useEffect(() => {
+		const locations = async () => {
+			try {
+				const data = await locationService.getLocations();
+				dispatch(setLocations(data));
+			} catch (error) {
+				console.error("Error fetching locations in useEffect:", error);
+			}
+		};
+
+		locations();
+	}, []);
 
 	return (
 		<Router>
