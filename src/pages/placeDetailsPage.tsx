@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import Carousel from "../components/Carousel";
 import Footer from "../components/Footer";
 import Chatbot from "../components/Chatbot";
 import { LocationDetails } from "../types/locations";
@@ -13,6 +12,14 @@ import { Heart, MapPinned } from "lucide-react";
 import commentService from "../services/commentService";
 import { AppComment, DbComment } from "../types/comments";
 import MapDisplay from "../components/MapDisplay";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from "@/components/Carousel";
+import { Card, CardContent } from "@/components/ui/card";
 
 const STATIC_BACKGROUND = "/photo/background.jpg";
 
@@ -354,8 +361,22 @@ const PlaceDetailsPage: React.FC = () => {
 				<Navbar />
 
 				<div className="relative max-h-[500px]">
-					<Carousel images={carasolImages} />
-					<h1 className="top-5 left-5 text-4xl z-10 text-white bg-brand-secondary/50 p-3 rounded-lg transition-opacity duration-500 absolute">
+					<Carousel className="w-full">
+						<CarouselContent>
+							{carasolImages.map((imageUrl, index) => (
+								<CarouselItem key={index}>
+									<img
+										src={imageUrl}
+										alt={`Slide ${index + 1}`}
+										className="w-full h-[500px] object-cover rounded-lg"
+									/>
+								</CarouselItem>
+							))}
+						</CarouselContent>
+						<CarouselPrevious className="absolute left-4" />
+						<CarouselNext className="absolute right-4" />
+					</Carousel>
+					<h1 className="top-5 left-5 text-4xl z-10 text-white bg-gray-600/50 p-3 rounded-lg transition-opacity duration-500 absolute">
 						{place.name}
 					</h1>
 				</div>
