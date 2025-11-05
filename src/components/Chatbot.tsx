@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import chatbotService from "../services/chatbotService";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "../store/hook";
 
 // Define types for a chat message
 interface ChatMessage {
@@ -8,6 +10,7 @@ interface ChatMessage {
 }
 
 const Chatbot: React.FC = () => {
+    const { user } = useAppSelector((state) => state.auth);
 	// State for UI management
 	const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -175,38 +178,53 @@ const Chatbot: React.FC = () => {
 
 				{/* Input Field with Send Button and Icon */}
 				<div className="p-3 border-t flex">
-					<input
-						type="text"
-						placeholder="Ask a question..."
-						className="w-full p-2 border rounded-l-md focus:outline-none focus:ring-brand-primary focus:border-brand-primary"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-						onKeyPress={handleKeyPress}
-                        disabled={isLoading}
-						title="Send Message"
-					/>
-					<button
-						onClick={sendMessage}
-						className="bg-brand-secondary text-white p-2 rounded-r-md hover:opacity-90 disabled:opacity-50 flex items-center justify-center"
-						disabled={isLoading}
-						title="Send Message"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-5 w-5"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-								transform="rotate(90 12 12)"
+                {user ? (
+						<div className="flex w-full">
+							<input
+								type="text"
+								placeholder="Ask a question..."
+								className="w-full p-2 border rounded-l-md focus:outline-none focus:ring-brand-primary focus:border-brand-primary"
+								value={input}
+								onChange={(e) => setInput(e.target.value)}
+								onKeyPress={handleKeyPress}
+								disabled={isLoading}
 							/>
-						</svg>
-					</button>
+							<button
+								onClick={sendMessage}
+								className="bg-brand-secondary text-white p-2 rounded-r-md hover:opacity-90 disabled:opacity-50 flex items-center justify-center"
+								disabled={isLoading || !input.trim()}
+								title="Send Message"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									className="h-5 w-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
+										d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+										transform="rotate(90 12 12)"
+									/>
+								</svg>
+							</button>
+						</div>
+					) : (
+						<p className="text-center text-sm text-gray-600 px-2">
+							Please{" "}
+							<Link
+								to="/login"
+								className="font-medium text-brand-secondary hover:text-brand-primary"
+								onClick={() => setIsChatOpen(false)} // Close chat on click
+							>
+								log in
+							</Link>{" "}
+							to chat with Pixie
+						</p>
+					)}
 				</div>
 			</div>
 
