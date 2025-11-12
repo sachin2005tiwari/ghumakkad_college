@@ -44,7 +44,7 @@ function AttractionCard(props: Props) {
             
             {/* ⬇️ Description Overlay (Jo Name Bar ke upar aane par dikhega) ⬇️ */}
             <div
-                className={`absolute inset-0 p-4 pt-12 flex flex-col justify-start items-center text-center 
+                className={`absolute inset-0 p-4 flex flex-col justify-start items-center text-center 
                             bg-black bg-opacity-10	0 transition-opacity duration-500 text-white
                             opacity-0 
                             ${isHovered ? 'opacity-100' : 'opacity-0'}`} 
