@@ -45,11 +45,11 @@ const LandingPage: React.FC = () => {
                 <Navbar showSearchBar={true} />
                 
                 {/* ⬇️ WELCOME SECTION ⬇️ */}
-                <div className="text-center p-8 [#f8f1ec] drop-shadow-lg">
+                <div className="text-center text-[#f8f1ec] p-8 drop-shadow-lg">
                     <h1 className="text-4xl lg:text-6xl font-extrabold mb-2 tracking-wide drop-shadow-lg">
                         Welcome to Ghumakkad!
                     </h1>
-                    <p className="text-xl lg:text-2xl font-medium drop-shadow-lg">
+                    <p className="text-xl lg:text-2xl  text-[#f8f1ec] font-medium drop-shadow-lg">
                         Because memories are meant to be shared, not forgotten.
                     </p>
                 </div>
