@@ -20,6 +20,22 @@ class CommentService {
 			throw error;
 		}
 	}
+	async getCommentsByUserId(userId: string) {
+		try {
+			// 'comments' से सभी कॉलम, साथ ही स्थान का नाम और ID लाएँ।
+			const { data, error } = await supabase
+				.from("comments")
+				.select("*, profiles(username), locations(name, id)") 
+				.eq("user_id", userId)
+				.order("created_at", { ascending: false });
+			
+			if (error) throw error;
+			return data;
+		} catch (error) {
+			console.error("Error fetching user comments:", error);
+			throw error;
+		}
+	}
 
 	async getLikeCounts(commentIds: number[]) {
 		try {
