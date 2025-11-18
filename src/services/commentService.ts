@@ -22,7 +22,7 @@ class CommentService {
 	}
 	async getCommentsByUserId(userId: string) {
 		try {
-			// 'comments' से सभी कॉलम, साथ ही स्थान का नाम और ID लाएँ।
+			
 			const { data, error } = await supabase
 				.from("comments")
 				.select("*, profiles(username), locations(name, id)") 
