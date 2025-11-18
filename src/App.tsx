@@ -10,7 +10,8 @@ import { supabase } from "./services/supabaseClient";
 import { setUser } from "./store/authSlice";
 import { useAppDispatch } from "./store/hook";
 import locationService from "./services/locationServices";
-import { setLocations } from "./store/locationSlice";
+import { setLoading, setLocations } from "./store/locationSlice";
+import MyCommentsPage from "./pages/MyCommentsPage";
 
 const App: React.FC = () => {
 	const dispatch = useAppDispatch();
@@ -41,10 +42,13 @@ const App: React.FC = () => {
 	useEffect(() => {
 		const locations = async () => {
 			try {
+				dispatch(setLoading(true));
 				const data = await locationService.getLocations();
 				dispatch(setLocations(data));
 			} catch (error) {
 				console.error("Error fetching locations in useEffect:", error);
+			} finally {
+				dispatch(setLoading(false));
 			}
 		};
 
@@ -65,6 +69,7 @@ const App: React.FC = () => {
 
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/register" element={<RegisterPage />} />
+				<Route path="/my-comments" element={<MyCommentsPage />} />
 			</Routes>
 		</Router>
 	);

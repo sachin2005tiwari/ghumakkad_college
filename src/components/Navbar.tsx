@@ -48,7 +48,7 @@ const Navbar = (props: NavbarProps) => {
 
 		// Cleanup function: clear the timer if the user types again before it fires.
 		return () => clearTimeout(timerId);
-	}, [searchTerm]);
+	}, [searchTerm, dispatch]);
 
 	const handleLogout = async () => {
         setIsDropdownOpen(false); // Close dropdown on logout
@@ -82,10 +82,11 @@ const Navbar = (props: NavbarProps) => {
 							alt="Travel Blog Logo"
 							className="h-[60px] lg:h-[80px] w-auto mr-2 rounded-full"
 						/>
-					</Link>
+					
 					<p className="text-brand-secondary text-2xl lg:text-3xl font-bold whitespace-nowrap">
 						Ghumakkad
 					</p>
+                    </Link>
 				</div>
                 
                 {/* ⬇️ Mobile Profile / Login Section - Visible on mobile, hidden on large screens ⬇️ */}
@@ -111,15 +112,15 @@ const Navbar = (props: NavbarProps) => {
                                         Hi, {username || 'Traveller'}
                                     </div>
                                     
-                                    {/* 2. My Comments Link (English) */}
-                                    {/* <Link 
+                                    {/* 2. My Comments Link (English) - ACTIVATED */}
+                                    <Link 
                                         to="/my-comments"
                                         onClick={handleMenuItemClick}
                                         className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition duration-100 text-sm"
                                     >
                                         <MessageSquare className="h-4 w-4 mr-2" />
                                         My Comments
-                                    </Link> */}
+                                    </Link>
                                     
                                     {/* 3. Logout Button (English) */}
                                     <button 
@@ -200,7 +201,7 @@ const Navbar = (props: NavbarProps) => {
                                     Hi, {username || 'Traveller'}
                                 </div>
                                 
-                                {/* 2. My Comments Link (English) */}
+                                {/* 2. My Comments Link (English) - ACTIVATED */}
                                 <Link 
                                     to="/my-comments"
                                     onClick={handleMenuItemClick}
