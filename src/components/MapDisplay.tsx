@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigation } from "lucide-react";
+import { Hotel, Navigation } from "lucide-react";
 
 interface MapDisplayProps {
 	lat: number;
@@ -18,6 +18,8 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ lat, lon, placeName }) => {
 	// prompting the user for their starting location.
 	const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}`;
 
+	const hotelSearchUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(placeName)}`; 
+
 	return (
 		<div className="w-full">
 			{/* The embedded OpenStreetMap */}
@@ -34,7 +36,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ lat, lon, placeName }) => {
 			></iframe>
 
 			{/* Button to get directions */}
-			<div className="text-center mt-4">
+			<div className="flex flex-wrap justify-center gap-4 mt-6">
 				<a
 					href={googleMapsUrl}
 					target="_blank" // Open in a new tab
@@ -43,6 +45,15 @@ const MapDisplay: React.FC<MapDisplayProps> = ({ lat, lon, placeName }) => {
 				>
 					<Navigation size={20} />
 					Get Directions
+				</a>
+				<a
+					href={hotelSearchUrl}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="inline-flex items-center justify-center gap-2 py-3 px-6 text-white text-lg font-medium bg-brand-secondary border-none rounded-md cursor-pointer transition duration-300 hover:bg-brand-primary shadow-md hover:shadow-lg"
+				>
+					<Hotel size={20} />
+					Check Hotel Prices
 				</a>
 			</div>
 		</div>
