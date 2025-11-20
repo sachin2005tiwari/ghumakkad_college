@@ -371,24 +371,35 @@ const PlaceDetailsPage: React.FC = () => {
 
     // Normal rendering once place data is loaded and available
     return (
-        <div
-            className="min-h-screen flex flex-col relative bg-cover bg-center"
-            style={{ backgroundImage: `url(${STATIC_BACKGROUND})` }}
-        >
-            <div className="absolute inset-0 bg-black opacity-70 z-0"></div>
-            <div className="relative z-10 flex-grow flex flex-col">
-                <Navbar />
+		<div
+			className="min-h-screen flex flex-col relative bg-cover bg-center"
+			style={{ backgroundImage: `url(${STATIC_BACKGROUND})` }}
+		>
+			<div className="absolute inset-0 bg-black opacity-70 z-0"></div>
+			<div className="relative z-10 flex-grow flex flex-col">
+				<Navbar />
 
 				<div className="relative max-h-[500px]">
 					<Carousel className="w-full">
 						<CarouselContent>
 							{carasolImages.map((imageUrl, index) => (
 								<CarouselItem key={index}>
-									<img
-										src={imageUrl}
-										alt={`Slide ${index + 1}`}
-										className="w-full h-[500px] object-cover rounded-lg"
-									/>
+									<div className="relative w-full h-[500px] overflow-hidden bg-gray-100">
+										{/* 1. Background Image (Blurred Fill) */}
+										<img
+											src={imageUrl}
+											alt=""
+											aria-hidden="true"
+											className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-90"
+										/>
+
+										{/* 2. Foreground Image (Sharp & Uncropped) */}
+										<img
+											src={imageUrl}
+											alt={`Slide ${index + 1}`}
+											className="relative rounded-2xl z-10 w-full h-full object-contain"
+										/>
+									</div>
 								</CarouselItem>
 							))}
 						</CarouselContent>
@@ -400,183 +411,183 @@ const PlaceDetailsPage: React.FC = () => {
 					</h1>
 				</div>
 
-                <div className="p-5 max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg my-8">
-                    <p className="text-xl text-gray-700 my-5">
-                        {place.about_description}
-                    </p>
-                </div>
+				<div className="p-5 max-w-4xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg my-8">
+					<p className="text-xl text-gray-700 my-5">
+						{place.about_description}
+					</p>
+				</div>
 
-                <div className="p-5 max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg my-8">
-                    <div className="grid grid-cols-3 w-full">
-                        {place.attractions_list.map((attraction, index) => {
-                            return (
-                                <AttractionCard
-                                    key={index}
-                                    imageUrl={attraction.screenshots[0]}
-                                    name={attraction.name}
-                                    description={attraction.desc}
-                                />
-                            );
-                        })}
-                    </div>
-                </div>
+				<div className="p-5 max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg my-8">
+					<div className="grid grid-cols-3 w-full">
+						{place.attractions_list.map((attraction, index) => {
+							return (
+								<AttractionCard
+									key={index}
+									imageUrl={attraction.screenshots[0]}
+									name={attraction.name}
+									description={attraction.desc}
+								/>
+							);
+						})}
+					</div>
+				</div>
 
-                <div className="max-w-4xl mx-auto w-full">
-                    {/* Location Tab */}
-                    <div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
-                        <h2 className="text-2xl font-semibold mb-3 text-gray-800">
-                            Location
-                        </h2>
-                        {place.latitude && place.longitude ? (
-                            <MapDisplay
-                                lat={place.latitude}
-                                lon={place.longitude}
-                                placeName={place.name}
-                            />
-                        ) : (
-                            <div className="w-full h-64 bg-gray-200 flex justify-center items-center text-gray-500 text-xl rounded-lg">
-                                <MapPinned size={30} className="mr-2" />
-                                <p>
-                                    Map data is not available for this location.
-                                </p>
-                            </div>
-                        )}
-                    </div>
+				<div className="max-w-4xl mx-auto w-full">
+					{/* Location Tab */}
+					<div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
+						<h2 className="text-2xl font-semibold mb-3 text-gray-800">
+							Location
+						</h2>
+						{place.latitude && place.longitude ? (
+							<MapDisplay
+								lat={place.latitude}
+								lon={place.longitude}
+								placeName={place.name}
+							/>
+						) : (
+							<div className="w-full h-64 bg-gray-200 flex justify-center items-center text-gray-500 text-xl rounded-lg">
+								<MapPinned size={30} className="mr-2" />
+								<p>
+									Map data is not available for this location.
+								</p>
+							</div>
+						)}
+					</div>
 
-                    {/* Comments Section */}
-                    <div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
-                        <h2 className="text-2xl font-semibold mb-3 text-gray-800">
-                            Comments
-                        </h2>
+					{/* Comments Section */}
+					<div className="my-8 p-5 bg-white/80 backdrop-blur-sm rounded-lg shadow-md shadow-brand-secondary/30">
+						<h2 className="text-2xl font-semibold mb-3 text-gray-800">
+							Comments
+						</h2>
 
-                        {/* Comment Input Section */}
-                        {user ? (
-                            <div className="mt-4 p-3 bg-gray-50/80 border border-gray-200 rounded-lg shadow-sm">
-                                <h3 className="text-lg font-medium text-gray-700 mb-2">
-                                    Post a Comment
-                                </h3>
-                                <textarea
-                                    value={newCommentText}
-                                    onChange={(e) =>
-                                        setNewCommentText(e.target.value)
-                                    }
-                                    placeholder="Share your thoughts..."
-                                    rows={3}
-                                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-brand-primary focus:border-brand-primary mb-3 resize-none"
-                                ></textarea>
-                                <button
-                                    onClick={handleAddComment}
-                                    className="py-2 px-5 text-white text-base bg-brand-primary border-none rounded-md cursor-pointer transition duration-300 hover:bg-brand-secondary"
-                                >
-                                    Comment
-                                </button>
-                            </div>
-                        ) : (
-                            <p className="text-center text-gray-600 p-4 border border-dashed rounded-lg bg-gray-50/80">
-                                <Link
-                                    to="/login"
-                                    className="font-medium text-brand-secondary hover:text-brand-primary transition duration-150"
-                                >
-                                    Log in
-                                </Link>{" "}
-                                to post a comment.
-                            </p>
-                        )}
+						{/* Comment Input Section */}
+						{user ? (
+							<div className="mt-4 p-3 bg-gray-50/80 border border-gray-200 rounded-lg shadow-sm">
+								<h3 className="text-lg font-medium text-gray-700 mb-2">
+									Post a Comment
+								</h3>
+								<textarea
+									value={newCommentText}
+									onChange={(e) =>
+										setNewCommentText(e.target.value)
+									}
+									placeholder="Share your thoughts..."
+									rows={3}
+									className="w-full p-2 border border-gray-300 rounded-md focus:ring-brand-primary focus:border-brand-primary mb-3 resize-none"
+								></textarea>
+								<button
+									onClick={handleAddComment}
+									className="py-2 px-5 text-white text-base bg-brand-primary border-none rounded-md cursor-pointer transition duration-300 hover:bg-brand-secondary"
+								>
+									Comment
+								</button>
+							</div>
+						) : (
+							<p className="text-center text-gray-600 p-4 border border-dashed rounded-lg bg-gray-50/80">
+								<Link
+									to="/login"
+									className="font-medium text-brand-secondary hover:text-brand-primary transition duration-150"
+								>
+									Log in
+								</Link>{" "}
+								to post a comment.
+							</p>
+						)}
 
-                        {/* Display Existing Comments */}
-                        <div className="mt-6">
-                            {loadingComments ? (
-                                <p className="text-center text-gray-500 p-4">
-                                    Loading comments...
-                                </p>
-                            ) : comments.length === 0 ? (
-                                <p className="text-center text-gray-500 p-4">
-                                    No comments yet. Be the first to share your
-                                    story!
-                                </p>
-                            ) : (
-                                comments.map((comment) => {
-                                    const isHearted =
-                                        userHeartedComments[comment.id];
+						{/* Display Existing Comments */}
+						<div className="mt-6">
+							{loadingComments ? (
+								<p className="text-center text-gray-500 p-4">
+									Loading comments...
+								</p>
+							) : comments.length === 0 ? (
+								<p className="text-center text-gray-500 p-4">
+									No comments yet. Be the first to share your
+									story!
+								</p>
+							) : (
+								comments.map((comment) => {
+									const isHearted =
+										userHeartedComments[comment.id];
 
-                                    return (
-                                        <div
-                                            key={comment.id}
-                                            className="mb-4 p-3 bg-gray-50/80 border border-gray-200 rounded-lg shadow-sm"
-                                        >
-                                            <h3 className="text-lg font-medium text-gray-700">
-                                                {comment.username}
-                                            </h3>
-                                            <span className="text-xs text-gray-500">
-                                                {new Date(
-                                                    comment.created_at
-                                                ).toLocaleString()}
-                                            </span>
-                                            {/* Use comment.content */}
-                                            <p className="mt-1 text-gray-600">
-                                                {comment.text}
-                                            </p>
-                                            <div className="flex items-center space-x-4 mt-2">
-                                                <button
-                                                    onClick={() =>
-                                                        handleToggleHeart(
-                                                            comment.id
-                                                        )
-                                                    }
-                                                    className={`flex items-center transition duration-150 ${
-                                                        isHearted
-                                                            ? "text-red-500"
-                                                            : "text-gray-500 hover:text-red-400"
-                                                    }`}
-                                                    aria-label="Heart comment"
-                                                >
-                                                    {isHearted ? (
-                                                        <Heart
-                                                            fill="#ef4444"
-                                                            className="h-5 w-5 mr-1"
-                                                        />
-                                                    ) : (
-                                                        <Heart className="h-5 w-5 mr-1" />
-                                                    )}
-                                                    <span className="text-sm font-medium text-gray-700">
-                                                        {comment.heartCount}
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
+									return (
+										<div
+											key={comment.id}
+											className="mb-4 p-3 bg-gray-50/80 border border-gray-200 rounded-lg shadow-sm"
+										>
+											<h3 className="text-lg font-medium text-gray-700">
+												{comment.username}
+											</h3>
+											<span className="text-xs text-gray-500">
+												{new Date(
+													comment.created_at
+												).toLocaleString()}
+											</span>
+											{/* Use comment.content */}
+											<p className="mt-1 text-gray-600">
+												{comment.text}
+											</p>
+											<div className="flex items-center space-x-4 mt-2">
+												<button
+													onClick={() =>
+														handleToggleHeart(
+															comment.id
+														)
+													}
+													className={`flex items-center transition duration-150 ${
+														isHearted
+															? "text-red-500"
+															: "text-gray-500 hover:text-red-400"
+													}`}
+													aria-label="Heart comment"
+												>
+													{isHearted ? (
+														<Heart
+															fill="#ef4444"
+															className="h-5 w-5 mr-1"
+														/>
+													) : (
+														<Heart className="h-5 w-5 mr-1" />
+													)}
+													<span className="text-sm font-medium text-gray-700">
+														{comment.heartCount}
+													</span>
+												</button>
+											</div>
+										</div>
+									);
+								})
+							)}
 
-                            {/* "Show More" Button */}
-                            {!loadingComments &&
-                                !loadingMore &&
-                                comments.length < totalComments && (
-                                    <div className="text-center mt-6">
-                                        <button
-                                            onClick={handleFetchMoreComments}
-                                            className="py-2 px-5 text-brand-secondary font-medium bg-gray-200 border-none rounded-md cursor-pointer transition duration-300 hover:bg-gray-300"
-                                        >
-                                            Show More Comments (
-                                            {comments.length} / {totalComments})
-                                        </button>
-                                    </div>
-                                )}
+							{/* "Show More" Button */}
+							{!loadingComments &&
+								!loadingMore &&
+								comments.length < totalComments && (
+									<div className="text-center mt-6">
+										<button
+											onClick={handleFetchMoreComments}
+											className="py-2 px-5 text-brand-secondary font-medium bg-gray-200 border-none rounded-md cursor-pointer transition duration-300 hover:bg-gray-300"
+										>
+											Show More Comments (
+											{comments.length} / {totalComments})
+										</button>
+									</div>
+								)}
 
-                            {loadingMore && (
-                                <p className="text-center text-gray-500 p-4">
-                                    Loading more...
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
+							{loadingMore && (
+								<p className="text-center text-gray-500 p-4">
+									Loading more...
+								</p>
+							)}
+						</div>
+					</div>
+				</div>
 
-                <Footer />
-                <Chatbot />
-            </div>
-        </div>
-    );
+				<Footer />
+				<Chatbot />
+			</div>
+		</div>
+	);
 };
 
 export default PlaceDetailsPage;
