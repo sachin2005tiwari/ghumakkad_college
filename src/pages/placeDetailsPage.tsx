@@ -20,6 +20,7 @@ import {
 	CarouselPrevious,
 } from "@/components/Carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import WeatherWidget from "@/components/WeatherWidget";
 
 const STATIC_BACKGROUND = "/photo/background.jpg";
 
@@ -585,6 +586,14 @@ const PlaceDetailsPage: React.FC = () => {
 
 				<Footer />
 				<Chatbot />
+
+				{place.latitude && place.longitude && (
+					<WeatherWidget
+						lat={place.latitude}
+						lon={place.longitude}
+						placeName={place.name}
+					/>
+				)}
 			</div>
 		</div>
 	);
